@@ -10,6 +10,7 @@
 #import "Profile.h"
 #import "Settings.h"
 
+
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *profileButton;
 @property (weak, nonatomic) IBOutlet UIButton *settingsButton;
@@ -25,6 +26,8 @@
 @property (strong, nonatomic) IBOutlet UITextField* firstName;
 @property (strong, nonatomic) IBOutlet UITextField* lastName;
 @property (weak, nonatomic) IBOutlet UIDatePicker* birthday;
+
+@property (strong, nonatomic) IBOutlet UIImageView* profilePicture;
 
 @end
 
@@ -128,6 +131,43 @@
     formattedDate = [dateFormatter stringFromDate:_profile.birthday];
     NSLog(@"%@",formattedDate);
     
+}
+
+-(IBAction)touchedThePicture:(id)sender
+{
+     //= [UIActionSheet new];
+   // [actionSheet addButtonWithTitle:@"Take Photo"];
+   // [actionSheet addButtonWithTitles:@"Take Photo", @"Select Photo from Gallery", "Cancel", nil];
+    //[actionSheet addButtonWithTitle:@"Select Photo from Gallery"];
+    //[actionSheet cancelButtonTitle:@"Cancel"];
+    //[actionSheet addButtonWithTitle:@"Cancel"];
+    
+    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Select Photo from Gallery", nil];
+    
+    [actionSheet showInView:self.view];
+}
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 0)
+        [self uploadPictureFrom:UIImagePickerControllerSourceTypeCamera];
+    else if (buttonIndex == 1)
+        [self uploadPictureFrom:UIImagePickerControllerSourceTypePhotoLibrary];
+}
+
+-(void)uploadPictureFrom:(UIImagePickerControllerSourceType)sourceType
+{
+    UIImagePickerController* imagePicker = [UIImagePickerController new];
+    imagePicker.delegate = self;
+    imagePicker.sourceType = sourceType;
+    [self presentViewController:imagePicker animated:YES completion:nil];
+}
+
+-(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    _profile.image = info[UIImagePickerControllerOriginalImage];
+    _profilePicture.image = _profile.image;
 }
 
 - (void)didReceiveMemoryWarning {
