@@ -29,6 +29,11 @@
 
 @property (strong, nonatomic) IBOutlet UIImageView* profilePicture;
 
+@property (strong, nonatomic) Settings* setting;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* redViewCenteredToButtonConstraint;
+
+
 @end
 
 @implementation ViewController
