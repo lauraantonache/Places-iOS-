@@ -32,6 +32,7 @@
 @property (strong, nonatomic) Settings* setting;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint* redViewCenteredToButtonConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* profileButtonWidthConstraint;
 
 
 @end
@@ -54,15 +55,41 @@
             [_settingsButton setSelected:NO];
             [_profileView setHidden:NO];
             [_settingsView setHidden:YES];
+            self.redViewCenteredToButtonConstraint.constant = 0;
+            [UIView animateWithDuration:0.2 animations:^
+             {
+                 [self.view layoutIfNeeded];
+             }];
         }
         else if ([sender isEqual:_settingsButton])
         {
             [_profileButton setSelected:NO];
             [_settingsButton setSelected:YES];
             [_profileView setHidden:YES];
-            [_settingsView setHidden:NO];        }
+            [_settingsView setHidden:NO];
+            //self.redViewCenteredToButtonConstraint.constant = 100;
+            self.redViewCenteredToButtonConstraint.constant = _profileButton.frame.size.width;
+            [UIView animateWithDuration:0.2 animations:^
+             {
+            [self.view layoutIfNeeded];
+             }];
+        }
     }
 }
+
+-(void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    if([_settingsButton isSelected])
+    {
+     self.redViewCenteredToButtonConstraint.constant = _profileButton.frame.size.width;
+    }
+    else
+    {
+        self.redViewCenteredToButtonConstraint.constant = 0;
+    }
+    [self.view layoutIfNeeded];
+}
+
 
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
